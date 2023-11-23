@@ -1,0 +1,40 @@
+%include 'in_out.asm'
+section .data
+msg1 db 'Введите x: ',0h
+msg2 db 'Введите a: ',0h
+section .bss
+max resb 10
+x resb 10
+a resb 10
+section .text
+global _start
+_start:
+; ---------- Вывод сообщения о вводе переменных
+mov eax,msg1
+mov ebx,msg2
+call sprint
+; ---------- Ввод переменных
+mov ecx,x
+mov edx,a
+call sread
+; ---------- Преобразование 'x and a' из символа в число
+mov eax,x
+call atoi ; Вызов подпрограммы перевода символа в число
+mov [x],eax; запись преобразованного числа в 'x'
+mov ebx,a
+call atoi
+mov [a],ebx
+; ---------- Сравниваем переменную x
+cmp eax,5
+jl check_x
+jge check_a
+; ---------- Вычесляем выражение если х>5
+check_x:
+mov eax,x
+mov ebx,a
+mul ebx
+check_a:
+mov eax,x
+sub eax,5
+call sprint
+call quit
